@@ -49,6 +49,9 @@ Renders an input field for entering any URL and a button for convenient selectio
 - placeholder: `string` A string to display before any text has been input.
 - readonly: `bool` If true, this field will not be editable.
 
+#### Usage
+The link field type can either return a plain url to your widget, or if the user uses the "Select Content" button, a special string indicating that a post permalink should be generated (of the format `post: x`). Pass the link field's return value through the `sow_esc_url` function to resolve these types of links.
+
 #### Example
 Form options input:
 ```php
@@ -461,6 +464,16 @@ Renders a media selector button. When clicked the button opens the WordPress Med
 - library: `string` Sets the media library which to browse and from which media can be selected. Allowed values are `'image'`, `'audio'`, `'video'`, and `'file'`. The default is `'image'`.
 - fallback: `bool` Whether or not to display a URL input field which allows for specification of a fallback URL to be used in case the selected media resource isn't available.
 
+#### Usage
+The media field returns the Attachment ID of the media element selected. Use one of the built in WordPress functions to turn this into an image URL or to retrieve the dimensions of the media:
+
+- [wp_get_attachment_url](https://codex.wordpress.org/Function_Reference/wp_get_attachment_url)
+- [wp_get_attachment_metadata](https://codex.wordpress.org/Function_Reference/wp_get_attachment_metadata)
+- [wp_get_attachment_image](https://codex.wordpress.org/Function_Reference/wp_get_attachment_image)
+- [wp_get_attachment_image_src](https://codex.wordpress.org/Function_Reference/wp_get_attachment_image_src)
+- [wp_get_attachment_link](https://codex.wordpress.org/Function_Reference/wp_get_attachment_link)
+- [wp_get_attachment_thumb_url](https://codex.wordpress.org/Function_Reference/wp_get_attachment_thumb_url)
+
 #### Example
 Form options input:
 ```php
@@ -504,6 +517,12 @@ Possible Image Size values:
 
 ### posts
 Renders a post selector field. This can be used to build custom queries with which to select posts from your database. The field displays a small red indicator which shows the number of posts currently being selected. By default, all posts are selected.
+
+
+#### Usage
+The post selector returns a pseudo query looking something like this: `post_type=_all&orderby=post__in&order=DESC&posts_per_page=3&sticky=&additional=`.
+
+This pseudo query may be transformed into a format understood by WordPress by using the siteorigin_widget_post_selector_process_query() function, which takes only the pseudo query as an argument and returns an array of query arguments which may be passed directly to the WP_Query constructor to find the posts.
 
 You can find more detail about the use of the post selector field [here](./post-selector.md).
 
